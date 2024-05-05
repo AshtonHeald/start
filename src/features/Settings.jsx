@@ -10,7 +10,7 @@ import { X } from "lucide-react";
 import TextField from "@mui/material/TextField";
 
 
-const Settings = ({ open, toggleDrawer, handleDrawerClose, updateName, name }) => {
+const Settings = ({ open, toggleDrawer, handleDrawerClose, updateName, name, getCurrentLocation }) => {
 
 	const handleNameChange = (event) => {
     updateName(event.target.value); // Update name when input changes
@@ -27,7 +27,7 @@ const Settings = ({ open, toggleDrawer, handleDrawerClose, updateName, name }) =
 					<TextField id="name" value={name} label="Name" variant="outlined" onChange={handleNameChange} />
 				</ListItem>
 				<ListItem>
-					<button >Get Location</button>
+					<button onClick={getCurrentLocation}>Get Location</button>
 				</ListItem>
 			</List>
 			<Divider />

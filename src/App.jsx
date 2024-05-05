@@ -10,6 +10,8 @@ import SettingsDrawer from "./features/Settings";
 import { Settings } from "lucide-react";
 import { pink } from "@mui/material/colors";
 
+import useLocation from './hooks/useLocation'; 
+
 const darkTheme = createTheme({
 	palette: {
 		mode: "dark",
@@ -48,18 +50,21 @@ function App() {
 		setOpen(false);
 	};
 
+	const { location, getCurrentLocation } = useLocation();
+
 	return (
 		<Box sx={{ height: "100vh" }}>
 			<ThemeProvider theme={darkTheme}>
 				<CssBaseline />
 				<Background />
-				<Header color={color} name={name} />
+				<Header color={color} name={name} location={location} />
 				<SettingsDrawer
 					open={open}
 					toggleDrawer={toggleDrawer}
 					handleDrawerClose={handleDrawerClose}
 					updateName={updateName}
 					name={name}
+					getCurrentLocation={getCurrentLocation}
 				/>
 				<Search />
 				<Box sx={{ position: "fixed", bottom: "0", left: "0" }}>
@@ -71,6 +76,11 @@ function App() {
 						<Settings />
 					</IconButton>
 				</Box>
+                {/* Display location information */}
+                <p>Latitude: {location.latitude}</p>
+                <p>Longitude: {location.longitude}</p>
+                <p>City: {location.city}</p>
+                <p>Country: {location.country}</p>
 			</ThemeProvider>
 		</Box>
 	);
