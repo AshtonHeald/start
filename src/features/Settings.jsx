@@ -1,5 +1,3 @@
-import useLocation from "../hooks/useLocation";
-
 import Drawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
 import Divider from "@mui/material/Divider";
@@ -18,16 +16,7 @@ const Settings = ({ open, toggleDrawer, handleDrawerClose, updateName, name }) =
     updateName(event.target.value); // Update name when input changes
   };
 
-	const [location, getLocation] = useLocation();
-	console.log(location);
-
-	const handleLocation = () => {
-		getLocation();
-		setTimeout(() => {
-			window.location.reload();
-	}, 1000);
-	};
-
+	
 	const DrawerList = (
 		<Box
 			sx={{ width: 250 }}
@@ -38,7 +27,7 @@ const Settings = ({ open, toggleDrawer, handleDrawerClose, updateName, name }) =
 					<TextField id="name" value={name} label="Name" variant="outlined" onChange={handleNameChange} />
 				</ListItem>
 				<ListItem>
-					<button onClick={handleLocation}>Get Location</button>
+					<button >Get Location</button>
 				</ListItem>
 			</List>
 			<Divider />

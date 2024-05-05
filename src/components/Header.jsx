@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import Clock from "../features/Clock";
-import Weather from "../features/Weather";
+//import Weather from "../features/Weather";
 import Typography from "@mui/material/Typography";
 
 const Header = ({name, color}) => {
@@ -26,7 +26,10 @@ const Header = ({name, color}) => {
 						&nbsp;{name}
 					</Box>
 				</Typography>
+				{/*
+				}
 				<Weather />
+			*/}
 			</Box>
 		</>
 	);

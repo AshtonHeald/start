@@ -1,109 +1,85 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
+
+const apiKey = import.meta.env.VITE_GEO_API_KEY;
 
 const useLocation = () => {
+	const [location, setLocation] = useState({
+		latitude: null,
+		longitude: null,
+		city: "",
+		country: "",
+	});
 
-    const geoAPIKey = import.meta.env.VITE_GEO_API_KEY;
-    console.log(import.meta.env);
+	useEffect(() => {
+		const storedLocation = JSON.parse(localStorage.getItem("location"));
+		if (storedLocation) {
+			setLocation(storedLocation);
+		} else {
+			fetchDefaultLocation();
+		}
+	}, []);
 
-    const [location, setLocation] = useState(null);
+	const fetchDefaultLocation = async () => {
+		try {
+			const response = await fetch(
+				`https://api.openweathermap.org/geo/1.0/direct?q=Tokyo&limit=1&appid=${apiKey}`
+			);
+			if (!response.ok) {
+				throw new Error("Failed to fetch default location");
+			}
+			const data = await response.json();
+			const defaultLocation = {
+				latitude: data[0].lat,
+				longitude: data[0].lon,
+				city: data[0].name,
+				country: data[0].country,
+			};
+			setLocation(defaultLocation);
+			localStorage.setItem("location", JSON.stringify(defaultLocation));
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
-    // Define loadDefaultLocation as a useCallback hook
-    const loadDefaultLocation = useCallback(async () => {
-        // Define setDefaultLocation inside loadDefaultLocation
-        const setDefaultLocation = async () => {
-            try {
-                const response = await fetch(
-                    `https://api.openweathermap.org/geo/1.0/direct?q=Tokyo&limit=1&appid=${geoAPIKey}`
-                );
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.length > 0) {
-                        const tokyoLocation = {
-                            city: data[0].name,
-                            country: data[0].country,
-                            latitude: data[0].lat,
-                            longitude: data[0].lon,
-                        };
-                        setLocation(tokyoLocation);
-                        localStorage.setItem(
-                            "location",
-                            JSON.stringify(tokyoLocation)
-                        );
-                    }
-                } else {
-                    throw new Error("Failed to fetch default location for Tokyo");
-                }
-            } catch (error) {
-                console.error(
-                    "Error setting the default location to Tokyo:",
-                    error
-                );
-            }
-        };
+	const getCurrentLocation = () => {
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(
+				(position) => {
+					const { latitude, longitude } = position.coords;
+					fetchLocationFromCoords(latitude, longitude);
+				},
+				(error) => {
+					console.error(error);
+				}
+			);
+		} else {
+			console.error("Geolocation is not supported by this browser.");
+		}
+	};
 
-        try {
-            const storedLocation = localStorage.getItem("location");
-            if (storedLocation) {
-                setLocation(JSON.parse(storedLocation));
-            } else {
-                await setDefaultLocation();
-            }
-        } catch (error) {
-            console.error("Error loading the default location:", error);
-        }
-    }, [geoAPIKey]);
+	const fetchLocationFromCoords = async (latitude, longitude) => {
+		try {
+			const response = await fetch(
+				`https://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=${apiKey}`
+			);
+			if (!response.ok) {
+				throw new Error("Failed to fetch location from coordinates");
+			}
+			const data = await response.json();
+			const currentLocation = {
+				latitude: latitude,
+				longitude: longitude,
+				city: data[0].name,
+				country: data[0].country,
+			};
+			setLocation(currentLocation);
+			localStorage.setItem("location", JSON.stringify(currentLocation));
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
-    const getLocation = () => {
-        if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(
-                async (position) => {
-                    const { latitude, longitude } = position.coords;
-                    try {
-                        const response = await fetch(
-                            `https://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=${geoAPIKey}`
-                        );
-                        if (response.ok) {
-                            const data = await response.json();
-                            if (data.length > 0) {
-                                const userLocation = {
-                                    city: data[0].name,
-                                    country: data[0].country,
-                                    latitude: data[0].lat,
-                                    longitude: data[0].lon,
-                                };
-                                setLocation(userLocation);
-                                localStorage.setItem(
-                                    "location",
-                                    JSON.stringify(userLocation)
-                                );
-                            }
-                        } else {
-                            throw new Error(
-                                "Failed to fetch location from coordinates"
-                            );
-                        }
-                    } catch (error) {
-                        console.error(
-                            "Error fetching location data from coordinates:",
-                            error
-                        );
-                    }
-                },
-                (error) => {
-                    console.error("Error getting user's position:", error);
-                }
-            );
-        } else {
-            console.error("Geolocation is not supported by this browser.");
-        }
-    };
-
-    useEffect(() => {
-        // Call loadDefaultLocation inside useEffect
-        loadDefaultLocation();
-    }, [loadDefaultLocation]);
-
-    return [location, getLocation];
+	return { location, getCurrentLocation };
 };
 
 export default useLocation;
