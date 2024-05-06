@@ -10,7 +10,10 @@ import SettingsDrawer from "./features/Settings";
 import { Settings } from "lucide-react";
 import { pink } from "@mui/material/colors";
 
-import useLocation from './hooks/useLocation'; 
+import Switch from "@mui/material/Switch";
+
+
+import useLocation from "./hooks/useLocation";
 
 const darkTheme = createTheme({
 	palette: {
@@ -26,6 +29,18 @@ const color = darkTheme.palette.primary.main;
 function App() {
 	const [open, setOpen] = useState(false);
 	const [name, setName] = useState(""); // State for name
+	const [unit, setUnit] = useState(
+		localStorage.getItem("unit") || "imperial"
+	);
+	// Initialize showSeconds state, defaulting to true if no item in local storage
+  const [showSeconds, setShowSeconds] = useState(
+    localStorage.getItem('showSeconds') === 'false' ? false : true
+  );
+
+  const handleSecondsToggle = () => {
+    setShowSeconds(!showSeconds);
+    localStorage.setItem('showSeconds', !showSeconds); // Update local storage
+  };
 
 	useEffect(() => {
 		// Load name from local storage on component mount
@@ -42,6 +57,14 @@ function App() {
 		localStorage.setItem("name", newName);
 	};
 
+	// Function to handle temperature unit change
+	const handleUnitChange = (event) => {
+		const newUnit = event.target.value;
+		setUnit(newUnit);
+		// Store temperature unit in local storage
+		localStorage.setItem("unit", newUnit);
+	};
+
 	const toggleDrawer = (newOpen) => () => {
 		setOpen(newOpen);
 	};
@@ -50,14 +73,22 @@ function App() {
 		setOpen(false);
 	};
 
-	const { location, getCurrentLocation } = useLocation();
+	
+	const { location, getCurrentLocation, resetLocation } = useLocation();
 
 	return (
 		<Box sx={{ height: "100vh" }}>
 			<ThemeProvider theme={darkTheme}>
 				<CssBaseline />
 				<Background />
-				<Header color={color} name={name} location={location} />
+				<Header
+					color={color}
+					name={name}
+					location={location}
+					unit={unit}
+					showSeconds={showSeconds}
+				/>
+				
 				<SettingsDrawer
 					open={open}
 					toggleDrawer={toggleDrawer}
@@ -65,6 +96,11 @@ function App() {
 					updateName={updateName}
 					name={name}
 					getCurrentLocation={getCurrentLocation}
+					resetLocation={resetLocation}
+					handleUnitChange={handleUnitChange}
+					unit={unit}
+					handleSecondsToggle={handleSecondsToggle}
+					showSeconds={showSeconds}
 				/>
 				<Search />
 				<Box sx={{ position: "fixed", bottom: "0", left: "0" }}>
@@ -76,11 +112,7 @@ function App() {
 						<Settings />
 					</IconButton>
 				</Box>
-                {/* Display location information */}
-                <p>Latitude: {location.latitude}</p>
-                <p>Longitude: {location.longitude}</p>
-                <p>City: {location.city}</p>
-                <p>Country: {location.country}</p>
+				
 			</ThemeProvider>
 		</Box>
 	);

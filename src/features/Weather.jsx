@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import {
 	CloudSun,
 	CloudMoon,
@@ -17,36 +18,37 @@ import {
 	CloudLightning,
 } from "lucide-react";
 
-const units = "imperial";
 const weatherApiKey = import.meta.env.VITE_WEATHER_API_KEY;
 
-const Weather = ({ location }) => {
-    const [weatherData, setWeatherData] = useState(null);
+const Weather = ({ location, unit }) => {
+	const [weatherData, setWeatherData] = useState(null);
 
-    useEffect(() => {
-        if (location.latitude && location.longitude) {
-            fetchWeatherData(location.latitude, location.longitude);
-        }
-    }, [location]);
+	useEffect(() => {
+		if (location.latitude && location.longitude) {
+			fetchWeatherData(location.latitude, location.longitude);
+		}
+	}, [location, unit]);
 
-    const fetchWeatherData = async (latitude, longitude) => {
-        try {
-            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=${units}&appid=${weatherApiKey}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch weather data');
-            }
-            const data = await response.json();
-            setWeatherData(data);
-        } catch (error) {
-            console.error(error);
-        }
-    };
+	const fetchWeatherData = async (latitude, longitude) => {
+		try {
+			const response = await fetch(
+				`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=${unit}&appid=${weatherApiKey}`
+			);
+			if (!response.ok) {
+				throw new Error("Failed to fetch weather data");
+			}
+			const data = await response.json();
+			setWeatherData(data);
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
-    if (!weatherData) {
-        return <div>Loading...</div>;
-    }
+	if (!weatherData) {
+		return <div>Loading...</div>;
+	}
 
-		const sunriseTime = new Date(weatherData.sys.sunrise * 1000);
+	const sunriseTime = new Date(weatherData.sys.sunrise * 1000);
 	const sunsetTime = new Date(weatherData.sys.sunset * 1000);
 	const currentTime = new Date();
 
@@ -121,14 +123,30 @@ const Weather = ({ location }) => {
 		804: <Cloudy />, // Overcast clouds
 	};
 
-    return (
-        <div>
-            <h2>Weather for {location.city}, {location.country}</h2>
-						{weatherConditionCodes[weatherData.weather[0].id.toString()]}
-            <p>Description: {weatherData.weather[0].description}</p>
-            <p>Temperature: {weatherData.main.temp} °F</p>
-        </div>
-    );
+	return (
+		<Box sx={{ textAlign: "right", padding: "6px 12px", width: "250px" }}>
+			<Typography variant="body1" sx={{ fontWeight: "bold" }}>
+				{location.city}, {location.country}
+			</Typography>
+			<Box
+				sx={{
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "end",
+				}}
+			>
+				{weatherConditionCodes[weatherData.weather[0].id.toString()]}
+				&nbsp;
+				{weatherData.weather[0].description.replace(/\b\w/g, (l) => l.toUpperCase())}
+				&nbsp;-&nbsp;
+				{Math.round(weatherData.main.temp)}
+				&nbsp;
+				{unit === "imperial" && "°F"}
+        {unit === "metric" && "°C"}
+        {unit === "standard" && "K"}
+			</Box>
+		</Box>
+	);
 };
 
 export default Weather;

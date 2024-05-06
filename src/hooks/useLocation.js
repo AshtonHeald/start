@@ -57,6 +57,10 @@ const useLocation = () => {
 		}
 	};
 
+	const resetLocation = async () => {
+    fetchDefaultLocation();
+  };
+
 	const fetchLocationFromCoords = async (latitude, longitude) => {
 		try {
 			const response = await fetch(
@@ -79,7 +83,7 @@ const useLocation = () => {
 		}
 	};
 
-	return { location, getCurrentLocation };
+	return { location, getCurrentLocation, resetLocation };
 };
 
 export default useLocation;
