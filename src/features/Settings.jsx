@@ -5,7 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Box from "@mui/material/Box";
-import { X, MapPin, RotateCcw, Clock  } from "lucide-react";
+import { X, MapPin, RotateCcw, Clock, SquarePlay } from "lucide-react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -18,6 +18,8 @@ import Switch from "@mui/material/Switch";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Paper from "@mui/material/Paper";
+import ListSubheader from "@mui/material/ListSubheader";
+import { MuiColorInput } from "mui-color-input";
 
 const Settings = ({
 	open,
@@ -31,6 +33,16 @@ const Settings = ({
 	handleUnitChange,
 	handleSecondsToggle,
 	showSeconds,
+	setDefaultSearchEngine,
+	defaultSearchEngine,
+	searchEngines,
+	videoList,
+	currentVideo,
+	handleVideoChange,
+	color,
+	handleColorChange,
+	autoPlay,
+	handleAutoPlayToggle,
 }) => {
 	const handleNameChange = (event) => {
 		updateName(event.target.value); // Update name when input changes
@@ -38,24 +50,40 @@ const Settings = ({
 
 	const DrawerList = (
 		<Box sx={{ width: 250 }} role="presentation">
-			<List>
-			<ListItem>
-					<Paper elevation={3}  sx={{ flexDirection: "row", display: "flex", alignItems: "center", width: "100%", borderRadius: "4px" }}>
-        <ListItemIcon sx={{ minWidth: "40px", height: "40px", display: "grid", placeItems: "center" }}>
-				<Clock />
-        </ListItemIcon>
-				<ListItemText id="" primary="Show Seconds" />
-				<Switch
-				sx={{mr: "0px"}}
-          edge="end"
-					onChange={handleSecondsToggle}
-          checked={showSeconds}
-          inputProps={{
-						'aria-labelledby': '',
-          }}
-					/>
+			<List subheader={<ListSubheader>Banner</ListSubheader>}>
+				<ListItem>
+					<Paper
+						elevation={3}
+						sx={{
+							flexDirection: "row",
+							display: "flex",
+							alignItems: "center",
+							width: "100%",
+							borderRadius: "4px",
+						}}
+					>
+						<ListItemIcon
+							sx={{
+								minWidth: "40px",
+								height: "40px",
+								display: "grid",
+								placeItems: "center",
+							}}
+						>
+							<Clock />
+						</ListItemIcon>
+						<ListItemText id="" primary="Show Seconds" />
+						<Switch
+							sx={{ mr: "0px" }}
+							edge="end"
+							onChange={handleSecondsToggle}
+							checked={showSeconds}
+							inputProps={{
+								"aria-labelledby": "",
+							}}
+						/>
 					</Paper>
-      </ListItem>
+				</ListItem>
 				<ListItem>
 					<TextField
 						id="name"
@@ -82,10 +110,7 @@ const Settings = ({
 					</FormControl>
 				</ListItem>
 				<ListItem>
-					<ButtonGroup 
-						variant="contained"
-						sx={{ width: "100%" }}
-					>
+					<ButtonGroup variant="contained" sx={{ width: "100%" }}>
 						<Button
 							onClick={getCurrentLocation}
 							variant="contained"
@@ -95,22 +120,113 @@ const Settings = ({
 							Get Location
 						</Button>
 						<Tooltip title="Reset" placement="top" arrow>
-						<Button
-						onClick={resetLocation}
-							sx={{
-								borderRadius: "0 4px 4px 0",
-								height: "40px",
-								width: "40px",
-								padding: "0",
-							}}
-						>
-							<RotateCcw size={20} />
-						</Button>
+							<Button
+								onClick={resetLocation}
+								sx={{
+									borderRadius: "0 4px 4px 0",
+									height: "40px",
+									width: "40px",
+									padding: "0",
+								}}
+							>
+								<RotateCcw size={20} />
+							</Button>
 						</Tooltip>
 					</ButtonGroup>
 				</ListItem>
 			</List>
 			<Divider />
+			<List subheader={<ListSubheader>Search</ListSubheader>}>
+				<ListItem>
+					<FormControl fullWidth>
+						<InputLabel id="engine-label">
+							Default Engine
+						</InputLabel>
+						<Select
+							labelId="engine-label"
+							label="Default Engine"
+							title="Default Search Engine"
+							value={defaultSearchEngine}
+							onChange={(e) => {
+								setDefaultSearchEngine(e.target.value);
+								localStorage.setItem(
+									"defaultSearchEngine",
+									e.target.value
+								);
+							}}
+						>
+							{searchEngines.map((engine) => (
+								<MenuItem key={engine.name} value={engine.url}>
+									{engine.name}
+								</MenuItem>
+							))}
+						</Select>
+					</FormControl>
+				</ListItem>
+				{/* <ListItem>Engine Options</ListItem>*/}
+			</List>
+			<Divider />
+			<List subheader={<ListSubheader>Style</ListSubheader>}>
+				<ListItem>
+					<MuiColorInput
+						label="Color"
+						title="Primary Color"
+						value={color}
+						onChange={handleColorChange}
+					/>
+				</ListItem>
+				<ListItem>
+					<FormControl fullWidth>
+						<InputLabel id="background-label">
+							Background
+						</InputLabel>
+						<Select
+							labelId="background-label"
+							label="Background"
+							title="Background Select"
+							value={currentVideo}
+							onChange={handleVideoChange}
+						>
+							{videoList.map((video, index) => (
+								<MenuItem key={index} value={video.url}>
+									{video.title}
+								</MenuItem>
+							))}
+						</Select>
+					</FormControl>
+				</ListItem>
+				<ListItem>
+				<Paper
+						elevation={3}
+						sx={{
+							flexDirection: "row",
+							display: "flex",
+							alignItems: "center",
+							width: "100%",
+							borderRadius: "4px",
+						}}
+					>
+						<ListItemIcon
+							sx={{
+								minWidth: "40px",
+								height: "40px",
+								display: "grid",
+								placeItems: "center",
+							}}
+						>
+							<SquarePlay />
+						</ListItemIcon>
+						<ListItemText id="" primary="Play Video" />
+				<Switch
+        sx={{ mr: "0px" }}
+        edge="end"
+        onChange={handleAutoPlayToggle}
+        checked={autoPlay}
+        inputProps={{ "aria-labelledby": "autoplay-switch" }}
+      />
+			</Paper>
+				</ListItem>
+			</List>
 		</Box>
 	);
 
