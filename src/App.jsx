@@ -14,6 +14,9 @@ import searchEngines from "./data/searchEngines";
 import videoList from "./data/videoList";
 import useLocation from "./hooks/useLocation";
 
+const defaultVideo = videoList.find(video => video.title === 'Robot Workshop');
+const defaultVideoUrl = defaultVideo ? defaultVideo.url : ''; 
+
 function App() {
 	// State hooks
 	const [autoPlay, setAutoPlay] = useState(true);
@@ -35,8 +38,7 @@ function App() {
 			},
 		},
 	});
-  const defaultVideo = videoList.find(video => video.title === 'Robot Workshop');
-  const defaultVideoUrl = defaultVideo ? defaultVideo.url : ''; 
+ 
 	const { location, getCurrentLocation, resetLocation } = useLocation();
 
 	// Effects
