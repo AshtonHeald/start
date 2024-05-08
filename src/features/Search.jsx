@@ -14,13 +14,12 @@ const SearchBar = ({ defaultSearchEngine, searchEngines }) => {
 
 	useEffect(() => {
 		const savedSearchEngine = localStorage.getItem("selectedSearchEngine");
-		// Set default search engine if not found in local storage
 		setSearchEngine(savedSearchEngine || defaultSearchEngine);
 	}, [defaultSearchEngine]);
 
 	const handleSearch = (e) => {
 		e.preventDefault();
-		window.open(searchEngine + encodeURIComponent(searchTerms));
+		window.location.href = searchEngine + encodeURIComponent(searchTerms);
 		setSearchTerms("");
 	};
 
