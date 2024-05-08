@@ -32,13 +32,18 @@ const Header = ({ name, color, location, unit, showSeconds }) => {
 			>
 				<Clock showSeconds={showSeconds} />
 				<Typography
-					variant="h4"
+					variant={"h4"}
 					gutterBottom
 					sx={{
 						display: "flex",
 						justifyContent: "center",
 						mb: 0,
 						fontWeight: "bold",
+						position: "fixed",
+						width: "100%",
+						"@media (max-width:810px)": {
+							fontSize: "1.6rem",
+						},
 					}}
 				>
 					{greeting}

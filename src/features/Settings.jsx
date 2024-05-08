@@ -1,25 +1,25 @@
+import { X, MapPin, RotateCcw, Clock, SquarePlay } from "lucide-react";
+import { MuiColorInput } from "mui-color-input";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 import Drawer from "@mui/material/Drawer";
-import Toolbar from "@mui/material/Toolbar";
 import Divider from "@mui/material/Divider";
+import FormControl from "@mui/material/FormControl";
 import IconButton from "@mui/material/IconButton";
+import InputLabel from "@mui/material/InputLabel";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import Box from "@mui/material/Box";
-import { X, MapPin, RotateCcw, Clock, SquarePlay } from "lucide-react";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import Switch from "@mui/material/Switch";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import Paper from "@mui/material/Paper";
 import ListSubheader from "@mui/material/ListSubheader";
-import { MuiColorInput } from "mui-color-input";
+import MenuItem from "@mui/material/MenuItem";
+import Paper from "@mui/material/Paper";
+import Select from "@mui/material/Select";
+import Switch from "@mui/material/Switch";
+import TextField from "@mui/material/TextField";
+import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
 
 const Settings = ({
 	open,
@@ -245,3 +245,5 @@ const Settings = ({
 };
 
 export default Settings;
+
+

@@ -1,6 +1,4 @@
-import { useState, useEffect } from 'react';
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+import { useState, useEffect } from "react";
 import {
 	CloudSun,
 	CloudMoon,
@@ -17,6 +15,8 @@ import {
 	Cloudy,
 	CloudLightning,
 } from "lucide-react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 const weatherApiKey = import.meta.env.VITE_WEATHER_API_KEY;
 
@@ -124,7 +124,7 @@ const Weather = ({ location, unit }) => {
 	};
 
 	return (
-		<Box sx={{ textAlign: "right", padding: "6px 12px", width: "250px" }}>
+		<Box sx={{ textAlign: "right", padding: "6px 12px" }}>
 			<Typography variant="body1" sx={{ fontWeight: "bold" }}>
 				{location.city}, {location.country}
 			</Typography>
@@ -137,13 +137,15 @@ const Weather = ({ location, unit }) => {
 			>
 				{weatherConditionCodes[weatherData.weather[0].id.toString()]}
 				&nbsp;
-				{weatherData.weather[0].description.replace(/\b\w/g, (l) => l.toUpperCase())}
+				{weatherData.weather[0].description.replace(/\b\w/g, (l) =>
+					l.toUpperCase()
+				)}
 				&nbsp;-&nbsp;
 				{Math.round(weatherData.main.temp)}
 				&nbsp;
 				{unit === "imperial" && "°F"}
-        {unit === "metric" && "°C"}
-        {unit === "standard" && "K"}
+				{unit === "metric" && "°C"}
+				{unit === "standard" && "K"}
 			</Box>
 		</Box>
 	);

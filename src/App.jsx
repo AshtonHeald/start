@@ -1,49 +1,32 @@
 import { useState, useEffect } from "react";
-import Header from "./components/Header";
-import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
+import { Settings } from "lucide-react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
+import IconButton from "@mui/material/IconButton";
+
+import Background from "./components/Background";
+import Header from "./components/Header";
 import Search from "./features/Search";
 import SettingsDrawer from "./features/Settings";
-import { Settings } from "lucide-react";
-import Background from "./components/Background";
+
 import searchEngines from "./data/searchEngines";
 import videoList from "./data/videoList";
 import useLocation from "./hooks/useLocation";
 
 function App() {
-
+	// State hooks
 	const [autoPlay, setAutoPlay] = useState(true);
   const [keyProp, setKeyProp] = useState(Date.now());
+	const [color, setColor] = useState(localStorage.getItem('selectedColor') || '#e91e63');
+	const [open, setOpen] = useState(false);
+	const [name, setName] = useState("");
+	const [unit, setUnit] = useState(localStorage.getItem("unit") || "imperial");
+	const [showSeconds, setShowSeconds] = useState(localStorage.getItem("showSeconds") !== "false");
+	const [defaultSearchEngine, setDefaultSearchEngine] = useState("");
+	const [currentVideo, setCurrentVideo] = useState(localStorage.getItem('selectedVideo') || defaultVideoUrl);
 
-  useEffect(() => {
-    // Retrieve autoPlay state from local storage
-    const storedAutoPlay = localStorage.getItem('autoPlay');
-    if (storedAutoPlay !== null) {
-      setAutoPlay(storedAutoPlay === 'true'); // Convert string to boolean
-    }
-  }, []);
-
-  const handleAutoPlayToggle = () => {
-    const newAutoPlay = !autoPlay; // Toggle autoPlay state
-    setAutoPlay(newAutoPlay);
-    localStorage.setItem('autoPlay', newAutoPlay); // Store new autoPlay state in local storage
-    setKeyProp(Date.now()); // Remount Background component by changing key prop
-  };
-	
-
-	// Set default color to either the value stored in local storage or '#e91e63' if no stored item
-  const defaultColor = localStorage.getItem('selectedColor') || '#e91e63';
-  const [color, setColor] = useState(defaultColor);
-
-  // Function to handle color change
-  const handleColorChange = (newColor) => {
-    setColor(newColor);
-    // Save the new color to local storage
-    localStorage.setItem('selectedColor', newColor);
-  };
-
+	// Declarations
 	const darkTheme = createTheme({
 		palette: {
 			mode: "dark",
@@ -52,23 +35,51 @@ function App() {
 			},
 		},
 	});
-
-	const [open, setOpen] = useState(false);
-	const [name, setName] = useState("");
-	const [unit, setUnit] = useState(
-		localStorage.getItem("unit") || "imperial"
-	);
-	const [showSeconds, setShowSeconds] = useState(
-		localStorage.getItem("showSeconds") === "false" ? false : true
-	);
-	const [defaultSearchEngine, setDefaultSearchEngine] = useState("");
-
   const defaultVideo = videoList.find(video => video.title === 'Robot Workshop');
   const defaultVideoUrl = defaultVideo ? defaultVideo.url : ''; 
-	const [currentVideo, setCurrentVideo] = useState(localStorage.getItem('selectedVideo') || defaultVideoUrl);
+	const { location, getCurrentLocation, resetLocation } = useLocation();
 
-  const changeVideo = (video) => {
-    console.log(`Changing video to: ${video}`);  
+	// Effects
+  useEffect(() => {
+    const storedAutoPlay = localStorage.getItem('autoPlay');
+    if (storedAutoPlay !== null) {
+      setAutoPlay(storedAutoPlay === 'true');
+    }
+  }, []);
+
+	useEffect(() => {
+    const storedVideo = localStorage.getItem('selectedVideo');
+    if (!storedVideo) { 
+      setCurrentVideo(defaultVideoUrl);
+    }
+  }, [defaultVideoUrl]);
+
+	useEffect(() => {
+		const storedName = localStorage.getItem("name");
+		if (storedName) {
+			setName(storedName);
+		}
+	}, []);
+
+	useEffect(() => {
+    const savedDefaultSearchEngine = localStorage.getItem("defaultSearchEngine");
+    setDefaultSearchEngine(savedDefaultSearchEngine || searchEngines[0].url);
+	}, []);
+
+	// Functions
+  const handleAutoPlayToggle = () => {
+    const newAutoPlay = !autoPlay;
+    setAutoPlay(newAutoPlay);
+    localStorage.setItem('autoPlay', newAutoPlay);
+    setKeyProp(Date.now());
+	};
+
+	const handleColorChange = (newColor) => {
+		setColor(newColor);
+		localStorage.setItem('selectedColor', newColor);
+	};
+
+	const changeVideo = (video) => {
     setCurrentVideo(video);
     localStorage.setItem('selectedVideo', video);
   };
@@ -78,24 +89,10 @@ function App() {
     changeVideo(selectedVideoUrl);
   };
 
-  useEffect(() => {
-    const storedVideo = localStorage.getItem('selectedVideo');
-    if (!storedVideo) { 
-      setCurrentVideo(defaultVideoUrl);
-    }
-  }, [defaultVideoUrl]);
-
 	const handleSecondsToggle = () => {
 		setShowSeconds(!showSeconds);
 		localStorage.setItem("showSeconds", !showSeconds);
 	};
-
-	useEffect(() => {
-		const storedName = localStorage.getItem("name");
-		if (storedName) {
-			setName(storedName);
-		}
-	}, []);
 
 	const updateName = (newName) => {
 		setName(newName);
@@ -116,22 +113,10 @@ function App() {
 		setOpen(false);
 	};
 
-	useEffect(() => {
-		const savedDefaultSearchEngine = localStorage.getItem(
-			"defaultSearchEngine"
-		);
-		setDefaultSearchEngine(
-			savedDefaultSearchEngine || searchEngines[0].url
-		);
-	}, []);
-
-	const { location, getCurrentLocation, resetLocation } = useLocation();
-
 	return (
 		<Box sx={{ height: "100vh" }}>
 			<ThemeProvider theme={darkTheme}>
-				<CssBaseline />
-				
+			<CssBaseline />
       <Background videoUrl={currentVideo} autoPlay={autoPlay} keyProp={keyProp} />
 				<Header
 					color={color}
@@ -140,7 +125,6 @@ function App() {
 					unit={unit}
 					showSeconds={showSeconds}
 				/>
-				
 				<SettingsDrawer
 					open={open}
 					toggleDrawer={toggleDrawer}

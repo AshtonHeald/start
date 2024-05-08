@@ -1,5 +1,3 @@
-
-
 const Background = ({ videoUrl, autoPlay, keyProp }) => {
 // keyProp is used to remount the component when autoPlay changes
   return (
