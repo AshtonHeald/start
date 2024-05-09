@@ -1,14 +1,24 @@
-import robot from "../assets/robot.mp4";
-import samurai from "../assets/samurai.mp4";
-import samurai2 from "../assets/samurai2.mp4";
-import samurai3 from "../assets/samurai3.mp4";
+import robotWorkshop from "../assets/robot-workshop.mp4";
+import samuraiSkyView from "../assets/samurai-sky-view.mp4";
+import samuraiMatrix from "../assets/samurai-matrix.mp4";
+//import pixelDaytimeTrain from "../assets/pixel-daytime-train.mp4";
+//import pixelMidnightTrain from "../assets/pixel-nighttime-train.mp4";
+import pixelDVaRoom from "../assets/pixel-d.va-room.mp4";
+import huhInterface from "../assets/huh-interface.mp4"
+import flowerGirl from "../assets/flower-girl.mp4";
+//import lofiGirl from "../assets/lofi-girl.mp4";
 
 const videoList = [
   { url: '', title: 'None'},
-  { url: robot, title: 'Robot Workshop' },
-  { url: samurai, title: 'Samurai' },
-  { url: samurai2, title: 'Samurai Station' },
-  { url: samurai3, title: 'Samurai City' },
+  { url: robotWorkshop, title: 'Robot Workshop' },
+  { url: samuraiMatrix, title: 'Samurai Matrix' },
+  { url: samuraiSkyView, title: 'Samurai Sky View' },
+  //{ url: pixelDaytimeTrain, title: 'Pixel Daytime Train' },
+  //{ url: pixelMidnightTrain, title: 'Pixel Midnight Train' },
+  { url: pixelDVaRoom, title: 'Pixel D.Va Room' },
+  { url: huhInterface, title: 'Hud Interface' },
+  { url: flowerGirl, title: 'Flower Girl' },
+  //{ url: lofiGirl, title: 'Lofi Girl' },
   // Add more video URLs and titles as needed
 ];
 

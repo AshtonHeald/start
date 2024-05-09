@@ -54,7 +54,7 @@ function App() {
     if (!storedVideo) { 
       setCurrentVideo(defaultVideoUrl);
     }
-  }, [defaultVideoUrl]);
+  }, []);
 
 	useEffect(() => {
 		const storedName = localStorage.getItem("name");
