@@ -2,7 +2,7 @@ import robotWorkshop from "../assets/robot-workshop.mp4";
 import samuraiSkyView from "../assets/samurai-sky-view.mp4";
 import samuraiMatrix from "../assets/samurai-matrix.mp4";
 import pixelDaytimeTrain from "../assets/pixel-daytime-train.mp4";
-import pixelMidnightTrain from "../assets/pixel-nighttime-train.mp4";
+import pixelMidnightTrain from "../assets/pixel-midnight-train.mp4";
 import pixelDVaRoom from "../assets/pixel-d.va-room.mp4";
 import hudInterface from "../assets/hud-interface.mp4"
 import flowerGirl from "../assets/flower-girl.mp4";
