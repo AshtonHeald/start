@@ -5,7 +5,7 @@
      Welcome to your personalized gateway to the web with Start Page!
   </p>
   <h4>
-    <a href="https://github.ashthe.dev/start/">View Demo</a>
+    <a href="https://ashtonheald.github.io/start/">View Demo</a>
     &emsp;&emsp;
     <a href="https://github.com/AshtonHeald/todo/issues/new">Report Bug</a>
   </h4>
@@ -109,3 +109,4 @@ pnpm run build
 ### License
 
 Distributed under the MIT License. See `LICENSE.md` for more information.
+
